@@ -1,0 +1,6 @@
+gem 'dm-core'
+gem 'dm-timestamps'
+gem 'do_sqlite3'
+gem 'sinatra'
+gem 'json'
+gem 'twitter_oauth'
