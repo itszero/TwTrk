@@ -22,6 +22,18 @@ TwTrkCmd_Logout = function(args) {
   }
 };
 
+TwTrkCmd_SSL = function(args) {
+  this.delegate = null;
+  this.want_input = false;
+  this.run = function() {
+    this.delegate.send_string("[PROMPT_BOT]");
+    this.delegate.send_string("正在啟動加密連線...");
+    setTimeout(function() {
+      location.href = 'https://twtrk.heroku.com/';
+    }, 260);
+  }  
+}
+
 TwTrkCmd_Help = function(args) {
   this.delegate = null;
   this.run = function() {

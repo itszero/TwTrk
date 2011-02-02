@@ -14,7 +14,9 @@ TwTrkBot = function(term) {
   this._cmdset = {};
   this._cmdsets = {
     USER_GUEST: {
-      'login': TwTrkCmd_Login
+      'login': TwTrkCmd_Login,
+      'ssl': TwTrkCmd_SSL,
+      'SSL': TwTrkCmd_SSL,
     },
     USER_AUTHED: {
       'plurk': TwTrkCmd_Plurk,
@@ -89,6 +91,11 @@ TwTrkBot = function(term) {
     this.send_string("歡迎使用\033[1;31m噗浪\033[m\033[1;32m推特\033[m同步機器人。\r\n");
     this.send_string("[PROMPT_BOT]");
     this.send_string("請輸入 \033[1;31mlogin\033[m 使用 Twitter 帳號驗證身分。\r\n");
+    if (window.location.protocol != 'https:')
+    {
+      this.send_string('[PROMPT_BOT]');
+      this.send_string('想使用 SSL 安全連線保護你\r\n的隱私？ 請輸入 \033[1;31mSSL\033[m 指令！\r\n');
+    }
     this.send_string("[PROMPT_USER]");
   }
 
