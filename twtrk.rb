@@ -83,7 +83,7 @@ end
 
 get '/twitter_auth' do
   client = TwitterOAuth::Client.new(@@oauth_info)
-  token_req = client.request_token(:oauth_callback => "http://#{request.host}/twitter_auth_cb")
+  token_req = client.request_token(:oauth_callback => "http#{request.secure? ? "s" : ""}://#{request.host}/twitter_auth_cb")
   session['token_req'] = token_req
   redirect token_req.authorize_url
 end
