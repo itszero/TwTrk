@@ -151,7 +151,7 @@ get '/twitter_auth_cb' do
 end
 
 post '/plurk_auth' do
-  data = Plurk.login(params[:username], params[:password])
+  data = Plurk.new.login(params[:username], params[:password])
   
   if @user && data["user_info"]
     @user.plurk_username = params[:username]
