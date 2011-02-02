@@ -266,9 +266,10 @@ TermView.Terminals.ANSI.prototype.putc = function(s) {
           a.push("");
 
         this._screenbuf.push(a);
-        for(var j=0;j<this._options.screen_size.w;j++)
-          this._dirties.push([j, this._caret.y]);
       }
+      for(var i=0;i<this._options.screen_size.h;i++)
+        for(var j=0;j<this._options.screen_size.w;j++)
+          this._dirties.push([j, i]);
     }
 
     this._screenbuf[this._caret.y][this._caret.x] = s + ";" + this.ansiAttributesToString();

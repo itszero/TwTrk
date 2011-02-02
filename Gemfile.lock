@@ -1,0 +1,78 @@
+GIT
+  remote: git://github.com/croaky/sinatra-mongoid.git
+  revision: d9553c9313044c2a86d9b2aa31821ca3217e6bab
+  specs:
+    sinatra-mongoid (0.0.2)
+      mongo_ext
+      mongoid
+      sinatra
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activemodel (3.0.3)
+      activesupport (= 3.0.3)
+      builder (~> 2.1.2)
+      i18n (~> 0.4)
+    activesupport (3.0.3)
+    backports (1.18.2)
+    bson (1.1.5)
+    bson_ext (1.1.5)
+    builder (2.1.2)
+    i18n (0.5.0)
+    json (1.4.6)
+    memcache-client (1.8.5)
+    mime-types (1.16)
+    mongo (1.1.5)
+      bson (>= 1.1.5)
+    mongo_ext (0.19.3)
+    mongoid (2.0.0.beta.20)
+      activemodel (~> 3.0)
+      mongo (~> 1.1)
+      tzinfo (~> 0.3.22)
+      will_paginate (~> 3.0.pre)
+    monkey-lib (0.5.4)
+      backports
+    oauth (0.4.4)
+    rack (1.2.1)
+    sinatra (1.1.2)
+      rack (~> 1.1)
+      tilt (~> 1.2)
+    sinatra-advanced-routes (0.5.1)
+      monkey-lib (~> 0.5.0)
+      sinatra (~> 1.0)
+      sinatra-sugar (~> 0.5.0)
+    sinatra-reloader (0.5.0)
+      sinatra (~> 1.0)
+      sinatra-advanced-routes (~> 0.5.0)
+    sinatra-sugar (0.5.0)
+      monkey-lib (~> 0.5.0)
+      sinatra (~> 1.0)
+    tilt (1.2.1)
+    twitter_oauth (0.4.3)
+      json (>= 1.1.9)
+      mime-types (>= 1.16)
+      oauth (>= 0.4.1)
+    tzinfo (0.3.23)
+    will_paginate (3.0.pre2)
+    wrest (1.1.0)
+      activesupport (~> 3.0.0)
+      builder (~> 2.1.2)
+      i18n (>= 0.4.1)
+      json (~> 1.4.6)
+      tzinfo (>= 0.3.23)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bson_ext
+  json
+  memcache-client
+  mongoid (= 2.0.0.beta.20)
+  rack
+  sinatra
+  sinatra-mongoid!
+  sinatra-reloader
+  twitter_oauth
+  wrest

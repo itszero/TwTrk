@@ -1,57 +1,118 @@
 TwTrkBot = function(term) {
   /* constants */
-  var USER_GUEST = 0;
-  var USER_AUTHED = 1;
+  var USER_GUEST = "USER_GUEST";
+  var USER_AUTHED = "USER_AUTHED";
 
-  var CMD_WAITCMD = 0;
-  
-  
   /* instance variables */
   this._term = term;
   this._send_buf = [];
   this._sending_lock = false;
   this._username = "";
+  this._cmdbuf = "";
+  this._running_cmd = null;
+  this._cmdset = {};
+  this._cmdsets = {
+    USER_GUEST: {
+      'login': TwTrkCmd_Login
+    },
+    USER_AUTHED: {
+      'plurk': TwTrkCmd_Plurk,
+      'sync': TwTrkCmd_Sync,
+      'info': TwTrkCmd_Info,
+      'help': TwTrkCmd_Help,
+      'logout': TwTrkCmd_Logout
+    }
+  };
   
   /* TermView delegate */
   this.send = function(data) {
+    if (this._running_cmd && !this._running_cmd.want_input)
+      return;
+    
     if (data.data == "\r")
-      this._term.incomingData("\r\n");
+    {
+      this.send_string("\r\n");
+      if (this._running_cmd != null && this._running_cmd.recv_line)
+        this._running_cmd.recv_line(this._cmdbuf);
+      else
+      {
+        var args = this._cmdbuf.split(" ");
+        var cmd = args[0];
+        if (this._cmdset[cmd] != null)
+        {
+          var running_cmd = new this._cmdset[cmd](args);
+          running_cmd.delegate = this;
+          this._running_cmd = running_cmd;
+          setTimeout(function() {
+            running_cmd.run();
+          }, 1);
+        }
+        else
+        {
+          this.send_string("[PROMPT_BOT]");
+          this.send_string("呃... 我聽不懂你在說什麼耶，可以再告訴我一次嘛？\r\n");
+          this.send_string("[PROMPT_USER]");
+        }
+      }
+      this._cmdbuf = "";
+    }
     else if (data.data == "\b")
     {
-      this._term.incomingData("\033[1D");
-      this._term.incomingData("\033[K");
+      if (this._cmdbuf.length > 0)
+      {
+        this.send_string("\033[1D");
+        this.send_string("\033[K");
+        this._cmdbuf = this._cmdbuf.substr(0, this._cmdbuf.length - 1);
+      }
     }
     else
-      this._term.incomingData(data.data);
+    {
+      if (this._running_cmd && this._running_cmd.receiving_password)
+        this.send_string("*");
+      else
+        this.send_string(data.data);
+      this._cmdbuf += data.data;
+    }
     
     this._term.flushBuffer();
+  }
+  
+  this._cmd_finished = function() {
+    this._running_cmd = null;
+    this.send_string("[PROMPT_USER]");
   }
 
   this.send_guest_greeting = function()
   {
     this.send_string("[PROMPT_BOT]");
-    this.send_string("歡迎使用\033[1;33m噗浪推特\033[m同步機器人。\r\n");
+    this.send_string("歡迎使用\033[1;31m噗浪\033[m\033[1;32m推特\033[m同步機器人。\r\n");
     this.send_string("[PROMPT_BOT]");
-    this.send_string("請輸入 \033[1;37mlogin\033[m 使用 Twitter 帳號驗證身分。\r\n");
+    this.send_string("請輸入 \033[1;31mlogin\033[m 使用 Twitter 帳號驗證身分。\r\n");
+    this.send_string("[PROMPT_USER]");
+  }
+
+  this.send_user_greeting = function()
+  {
+    this.send_string("[PROMPT_BOT]");
+    this.send_string("歡迎使用\033[1;31m噗浪\033[m\033[1;32m推特\033[m同步機器人。\r\n");
+    this.send_string("[PROMPT_BOT]");
+    this.send_string("Twitter 帳號確認完成，使用\r\n\033[1;31mplurk\033[m 指令登入噗浪後即可開始同步。\r\n");
+    this.send_string("[PROMPT_BOT]");
+    this.send_string("若有任何問題，請用 \033[1;31mhelp\033[m 指令。\r\n");
     this.send_string("[PROMPT_USER]");
   }
   
-  /* system init */
-  var obj = this;
-  $.get('/get_status', {}, function(data) {
-    if (data.user_state == 'guest')
-      obj._user_state = USER_GUEST;
-    else
+  this.send_msg_greeting = function(msgid)
+  {
+    if (msgid == "TWITTER_AUTH_FAILED")
     {
-      obj._user_state = USER_AUTHED;
-      obj._username = data.username;
+      this.send_string("[PROMPT_BOT]");
+      this.send_string("認證失敗！");
+      this.send_string("[PROMPT_BOT]");
+      this.send_string("請輸入 \033[1;37mlogin\033[m 使用 Twitter 帳號驗證身分。\r\n");
+      this.send_string("[PROMPT_USER]");
     }
-      
-    if (obj._user_state == USER_GUEST)
-      obj.send_guest_greeting.apply(obj);
-    else
-      obj.send_user_greeting.apply(obj);
-  }, 'json');
+  }
   
   /* private functions */
   this.send_string = function(str)
@@ -84,12 +145,12 @@ TwTrkBot = function(term) {
     var nextstr = str.substr(1, str.length);
     if (str == "[PROMPT_BOT]")
     {
-      this._term.incomingData("TwTrk> ");
+      this._term.incomingData("\033[1;34mTwTrk\033[m> ");
       nextstr = "";
     }
     else if (str == "[PROMPT_USER]")
     {
-      this._term.incomingData((this._username == "" ? "Guest> " : this._username + "> "));
+      this._term.incomingData("\033[1;37m" + (this._username == "" ? "Guest> " : this._username + "\033[m> "));
       nextstr = "";
     }
     else
@@ -97,6 +158,29 @@ TwTrkBot = function(term) {
       this._term.incomingData(str[0]);
     }
     this._term.flushBuffer();
-    setTimeout(function() { obj.random_delay_send_text.apply(obj, [nextstr]); }, Math.random() * 10);
+    setTimeout(function() { obj.random_delay_send_text.apply(obj, [nextstr]); }, Math.random() * 5);
   }
+
+  /* system init */
+  var obj = this;
+  this.send_string("請稍後，正在載入機器人程式中...");
+  $.get('/get_status', {}, function(data) {
+    if (data.user_state == 'guest')
+      obj._user_state = USER_GUEST;
+    else
+    {
+      obj._user_state = USER_AUTHED;
+      obj._username = data.username;
+    }
+    
+    obj._cmdset = obj._cmdsets[obj._user_state];
+      
+    obj.send_string('\033[1J');
+    if (data.send_msg)
+      obj.send_msg_greeting.apply(obj, [data.send_msg]);
+    else if (obj._user_state == USER_GUEST)
+      obj.send_guest_greeting.apply(obj);
+    else
+      obj.send_user_greeting.apply(obj);
+  }, 'json');
 }

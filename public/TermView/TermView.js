@@ -21,7 +21,7 @@ TermView = function() {
     var self = this;
     $('body').keydown(function(pEvent) {
       var a = null;
-      if (!pEvent.ctrlKey && !pEvent.altKey && !pEvent.shiftKey && !pEvent.metaKey) {
+      if (!pEvent.ctrlKey && !pEvent.altKey && !pEvent.metaKey) {
         if (pEvent.keyCode == 13)
           a = '\r';
         else if (pEvent.keyCode == 8) // BS
@@ -79,7 +79,7 @@ TermView = function() {
         pEvent.stopPropagation();
         pEvent.preventDefault();          
       }
-      else if (!pEvent.ctrlKey && !pEvent.altKey && !pEvent.shiftKey && !pEvent.metaKey)
+      else if (!pEvent.ctrlKey && !pEvent.altKey && !pEvent.metaKey)
       {
         if (a)
           self._delegate.send({type: 'key', data: a});
@@ -120,7 +120,12 @@ TermView.prototype.flushBuffer = function() {
   this._buffer = "";
 }
 
-TermView.prototype.dataAt = function(x, y) { return this._terminal.getScreenBuffer()[y][x]; }
+TermView.prototype.dataAt = function(x, y) { 
+  var ydata = this._terminal.getScreenBuffer()[y];
+  if (ydata == undefined)
+    return undefined;
+  return ydata[x];
+}
 
 TermView.prototype.terminalDidBecomeDirty = function(dirties) {
   this._renderer.updateScreen(dirties);

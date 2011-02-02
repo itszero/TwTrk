@@ -103,9 +103,16 @@ TermView.Renderers.Canvas.prototype.updateScreen = function(dirties) {
 TermView.Renderers.Canvas.prototype.renderCharAt = function(x, y) {
   var d = this._delegate.dataAt(x, y);
   if ( d == undefined ) return;
-  
-  var c = d[0] || "";
+    
   d = d.split(";");
+  var c = d[0] || "";
+  // skip empty char if its left neighbor is a CJK character
+  if (c == "" && x !=0)
+  {
+    var td = this._delegate.dataAt(x-1, y);
+    if (this.isCJK(td.split(";")[0]))
+      return;
+  }
   var p = this.posToPoint(x, y);
 
   this._ctx.textBaseline = "bottom";
