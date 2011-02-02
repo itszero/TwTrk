@@ -40,10 +40,10 @@ TwTrkCmd_Help = function(args) {
     this.delegate.send_string("[PROMPT_BOT]");
     this.delegate.send_string(" 可用指令列表：\r\n");
     this.delegate.send_string("  plurk         - 登入噗浪帳號\r\n");
-    this.delegate.send_string("  list          - 同步記錄\r\n");
     this.delegate.send_string("  sync (on|off) - 切換是否同步\r\n");
     this.delegate.send_string("  info          - 顯示使用者資訊\r\n");
     this.delegate.send_string("  help          - 可用指令列表\r\n");
+    this.delegate.send_string("  logout        - 登出系統\r\n");
     this.delegate.send_string("\r\n");
     this.delegate.send_string("\033[1;37mTwTrk\033[m, \033[1;32mtwitter\033[m->\033[1;31mplurk\033[m syncing bot\r\n");
     this.delegate.send_string("Written by \033[1;31mZero\033[m 2011\r\n");
@@ -184,7 +184,7 @@ TwTrkCmd_Plurk = function(args) {
         this.state = this.states.WAIT_PASSWORD;
         this.receiving_password = true;
         this.delegate.send_string("[PROMPT_BOT]");
-        this.delegate.send_string("請輸入噗浪密碼：\r\n  > ")
+        this.delegate.send_string("請輸入噗浪密碼：\r\n  請注意您的噗浪密碼\r\n  將以\033[1;31m明碼\033[m儲存在伺服器上。\r\n  > ")
         break;
       case this.states.WAIT_PASSWORD:
         this.password = str;

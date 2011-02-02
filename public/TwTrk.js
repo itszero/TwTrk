@@ -39,6 +39,7 @@ TwTrkBot = function(term) {
         this._running_cmd.recv_line(this._cmdbuf);
       else
       {
+        this._cmdbuf = str_trim(this._cmdbuf);
         var args = this._cmdbuf.split(" ");
         var cmd = args[0];
         if (this._cmdset[cmd] != null)
@@ -192,3 +193,14 @@ TwTrkBot = function(term) {
       obj.send_user_greeting.apply(obj);
   }, 'json');
 }
+
+// Author: Ariel Flesler
+// http://flesler.blogspot.com/2008/11/fast-trim-function-for-javascript.html
+// Licensed under BSD
+function str_trim(str) {
+  var start = -1,
+  end = str.length;
+  while (str.charCodeAt(--end) < 33);
+  while (str.charCodeAt(++start) < 33);
+  return str.slice(start, end + 1);
+};
