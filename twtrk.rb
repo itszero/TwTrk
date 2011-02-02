@@ -57,7 +57,7 @@ class Plurk
   end
   
   def post(content, qualifier="says")
-    JSON.parse(@http.get("#{api_ep}/Timeline/plurkAdd?api_key=#{PLURK_API_KEY}&content=#{content}&qualifier=#{qualifier}").body)
+    JSON.parse(@http.post("#{api_ep}/Timeline/plurkAdd?api_key=#{PLURK_API_KEY}", {:content => content, :qualifier => qualifier}).body)
   end
   
   def api_ep

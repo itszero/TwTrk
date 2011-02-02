@@ -26,6 +26,7 @@ TermView = function() {
           a = '\r';
         else if (pEvent.keyCode == 8) // BS
           a = '\b';
+/* not used, let's eat all. XD
         else if (pEvent.keyCode == 9) // TAB
         {
           a = '\t';
@@ -59,7 +60,7 @@ TermView = function() {
           pEvent.stopPropagation();
           pEvent.preventDefault();
         }
-
+*/
         if (a)
         {
           self._delegate.send({type: 'key', data: a});
