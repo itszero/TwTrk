@@ -53,7 +53,6 @@ task :cron do
       end
     rescue Exception
       logger.error $!.inspect
-      logger.error $!.page.body
       logger.error $!.backtrace.join("\n")
       user.sync_logs << SyncLog.create(:result => false, :synced_twits => synced_twits, :error => "#{$!.message}\n#{$!.backtrace.join("\n")}")
     end
