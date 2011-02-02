@@ -72,7 +72,7 @@ TwTrkCmd_Info = function(args) {
         obj.delegate.send_string("      註冊日期： " + data.joined_at + "\r\n");
         obj.delegate.send_string("\r\n");
         obj.delegate.send_string("最後五筆同步記錄：\r\n");
-        obj.delegate.send_string("結果 | 同步推特筆數 | 同步時間\r\n");
+        obj.delegate.send_string("結果 | 同步筆數 | 同步時間\r\n");
         obj.delegate.send_string("=====================================\r\n");
         for(var i=0;i<data.logs.length;i++)
         {

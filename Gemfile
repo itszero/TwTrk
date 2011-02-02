@@ -9,4 +9,4 @@ gem 'dalli'
 
 gem 'mongoid', '2.0.0.beta.20'
 gem 'bson_ext'
-gem 'wrest'
+gem 'mechanize'

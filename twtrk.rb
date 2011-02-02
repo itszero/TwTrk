@@ -26,8 +26,9 @@ class SyncLog
   
   referenced_in :user, :inverse_of => :sync_log
   field :result, :type => Boolean
-  field :synced_twits, :type => Integer
+  field :synced_twits, :type => Integer, :default => 0
   field :last_synced_twit_id, :type => Integer
+  field :error, :type => String
 end
 
 class User
@@ -45,8 +46,27 @@ class User
   references_many :sync_logs
 end
 
-PLURK_API_KEY = "SJnWoSCIyOsGKJRMZpZipBOQ1twyR91y"
+class Plurk
+  def initialize
+    @api_ep = "http://www.plurk.com/API"
+    @http = Mechanize.new
+  end
+  
+  def login(username, password)
+    JSON.parse(@http.get("#{api_ep}/Users/login?api_key=#{PLURK_API_KEY}&username=#{username}&password=#{password}").body)
+  end
+  
+  def post(content, qualifier="says")
+    JSON.parse(@http.get("#{api_ep}/Timeline/plurkAdd?api_key=#{PLURK_API_KEY}&content=#{content}&qualifier=#{qualifier}").body)
+  end
+  
+  def api_ep
+    @api_ep
+  end
+end
+
 @@oauth_info = YAML::load(File.read('oauth.yml'))
+PLURK_API_KEY = @@oauth_info[:plurk_api_key]
 use Rack::Session::DalliMemcache, {
   :namespace => "TwTrk_session"
 }
@@ -92,8 +112,9 @@ get '/twitter_auth_cb' do
   client = TwitterOAuth::Client.new(@@oauth_info)
   token_req = session['token_req']
   session['token_req'] = nil
+  access_token = nil
   begin
-    client.authorize(
+    access_token = client.authorize(
       token_req.token,
       token_req.secret,
       :oauth_verifier => params[:oauth_verifier]
@@ -107,14 +128,14 @@ get '/twitter_auth_cb' do
     session['username'] = uinfo['name']
     if u = User.where(:twitter_username => uinfo['screen_name'])[0]
       u.update_attributes(
-        :twitter_token => token_req.token,
-        :twitter_secret => token_req.secret
+        :twitter_token => access_token.token,
+        :twitter_secret => access_token.secret
       )
     else
       u = User.new(
         :twitter_username => uinfo['screen_name'],
-        :twitter_token => token_req.token,
-        :twitter_secret => token_req.secret
+        :twitter_token => access_token.token,
+        :twitter_secret => access_token.secret
       )
     end
     u.save
@@ -130,7 +151,7 @@ get '/twitter_auth_cb' do
 end
 
 post '/plurk_auth' do
-  data = JSON.parse("http://www.plurk.com/API/Users/login?api_key=#{PLURK_API_KEY}&username=#{params[:username]}&password=#{params[:password]}".to_uri.get.body)
+  data = Plurk.login(params[:username], params[:password])
   
   if @user && data["user_info"]
     @user.plurk_username = params[:username]
@@ -170,15 +191,15 @@ get '/info' do
       :logs => @user.sync_logs.desc(:created_at).limit(5).map { |log|
         {
           :result => log.result,
-          :synced_twits => sprintf("%12d", log.synced_twits),
-          :synced_at => log.created_at.strftime("%Y/%m/%d")
+          :synced_twits => log.synced_twits < 0 ? "  第一次" : sprintf("%8d", log.synced_twits),
+          :synced_at => log.created_at.strftime("%Y/%m/%d %0H:%0M:%0S")
         }
       }
     }.to_json
   else
-#    status 503
+    status 503
     {:status => 'err', :session => session}.to_json
-  end    
+  end 
 end
 
 get '/logout' do

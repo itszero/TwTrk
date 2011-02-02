@@ -21,6 +21,8 @@ GEM
     dalli (1.0.1)
     i18n (0.5.0)
     json (1.4.6)
+    mechanize (1.0.0)
+      nokogiri (>= 1.2.1)
     mime-types (1.16)
     mongo (1.1.5)
       bson (>= 1.1.5)
@@ -30,6 +32,7 @@ GEM
       mongo (~> 1.1)
       tzinfo (~> 0.3.22)
       will_paginate (~> 3.0.pre)
+    nokogiri (1.4.4)
     oauth (0.4.4)
     rack (1.2.1)
     sinatra (1.1.2)
@@ -42,12 +45,6 @@ GEM
       oauth (>= 0.4.1)
     tzinfo (0.3.23)
     will_paginate (3.0.pre2)
-    wrest (1.1.0)
-      activesupport (~> 3.0.0)
-      builder (~> 2.1.2)
-      i18n (>= 0.4.1)
-      json (~> 1.4.6)
-      tzinfo (>= 0.3.23)
 
 PLATFORMS
   ruby
@@ -56,9 +53,9 @@ DEPENDENCIES
   bson_ext
   dalli
   json
+  mechanize
   mongoid (= 2.0.0.beta.20)
   rack
   sinatra
   sinatra-mongoid!
   twitter_oauth
-  wrest
