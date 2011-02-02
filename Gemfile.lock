@@ -19,9 +19,9 @@ GEM
     bson (1.1.5)
     bson_ext (1.1.5)
     builder (2.1.2)
+    dalli (1.0.1)
     i18n (0.5.0)
     json (1.4.6)
-    memcache-client (1.8.5)
     mime-types (1.16)
     mongo (1.1.5)
       bson (>= 1.1.5)
@@ -67,8 +67,8 @@ PLATFORMS
 
 DEPENDENCIES
   bson_ext
+  dalli
   json
-  memcache-client
   mongoid (= 2.0.0.beta.20)
   rack
   sinatra

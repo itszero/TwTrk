@@ -45,8 +45,7 @@ end
 PLURK_API_KEY = "SJnWoSCIyOsGKJRMZpZipBOQ1twyR91y"
 @@oauth_info = YAML::load(File.read('oauth.yml'))
 use Rack::Session::Memcache, {
-  :namespace => "TwTrk_session",
-  :memcache_server => 'localhost:11211'
+  :namespace => "TwTrk_session"
 }
 
 before do
