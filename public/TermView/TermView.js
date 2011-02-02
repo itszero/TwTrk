@@ -81,7 +81,7 @@ TermView = function() {
       }
       else if (!pEvent.ctrlKey && !pEvent.altKey && !pEvent.metaKey)
       {
-        if (a)
+        if (a && a != " ")
           self._delegate.send({type: 'key', data: a});
       }
     });
