@@ -66,7 +66,11 @@ after do
 end
 
 get '/' do
-  redirect '/index.html'
+  if request.secure?
+    redirect "https://#{request.host}/index.html"
+  else
+    redirect '/index.html'
+  end
 end
 
 get '/get_status' do
