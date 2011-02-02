@@ -122,7 +122,11 @@ get '/twitter_auth_cb' do
   else
     session['show_msg'] = "TWITTER_AUTH_FAILED"
   end
-  redirect '/'
+  if request.secure?
+    redirect "https://#{request.host}/"
+  else
+    redirect '/'
+  end
 end
 
 post '/plurk_auth' do
@@ -180,5 +184,9 @@ end
 get '/logout' do
   @user = nil
   session.clear
-  redirect '/'
+  if request.secure?
+    redirect "https://#{request.host}/"
+  else
+    redirect '/'
+  end
 end
