@@ -19,7 +19,7 @@ TermView = function() {
     this._renderer = new this._options.renderer(this._options);
 
     var self = this;
-    $('document').keydown(function(pEvent) {
+    $(document).keydown(function(pEvent) {
       var a = null;
       if (!pEvent.ctrlKey && !pEvent.altKey && !pEvent.metaKey) {
         if (pEvent.keyCode == 13)
