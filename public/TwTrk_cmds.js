@@ -60,14 +60,16 @@ TwTrkCmd_Info = function(args) {
         obj.delegate.send_string("      註冊日期： " + data.joined_at + "\r\n");
         obj.delegate.send_string("\r\n");
         obj.delegate.send_string("同步記錄：\r\n");
-        obj.delegate.send_string("同步結果 | 同步推特筆數 | 同步時間\r\n");
-        obj.delegate.send_string("=======================================\r\n");
-        for(var i=0;i<data.logs.size;i++)
+        obj.delegate.send_string("結果 | 同步推特筆數 | 同步時間\r\n");
+        obj.delegate.send_string("=====================================\r\n");
+        for(var i=0;i<data.logs.length;i++)
         {
-          obj.delegate.send_string("  " + (data.logs[i].result ? "\033[1;32m成功\033[m" : "\033[1;31m失敗\033[m") + "   |");
-          obj.delegate.send_string("  " + data.logs[i].synced_twits + " |");
-          obj.delegate.send_string("  " + data.logs[i].synced_at + " |");
+          obj.delegate.send_string((data.logs[i].result ? "\033[1;32m成功\033[m" : "\033[1;31m失敗\033[m") + " |");
+          obj.delegate.send_string(" " + data.logs[i].synced_twits + " |");
+          obj.delegate.send_string(" " + data.logs[i].synced_at + "\r\n");
         }
+        if (data.logs.length == 0)
+          obj.delegate.send_string("  沒有同步記錄\r\n");
         obj.delegate._cmd_finished();
       },
       error: function(xhr, ts, err) {

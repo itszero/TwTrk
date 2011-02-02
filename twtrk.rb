@@ -39,7 +39,7 @@ class User
   field :should_sync, :type => Boolean, :default => false
   field :last_synced_twit_id, :type => Integer
 
-  references_many :sync_log
+  references_many :sync_logs
 end
 
 PLURK_API_KEY = "SJnWoSCIyOsGKJRMZpZipBOQ1twyR91y"
@@ -50,28 +50,17 @@ use Rack::Session::Memcache, {
 }
 
 before do
-  @user = session['user']
+  @user = User.find(session['user_id']) if session['user_id']
   if session["user_state"].nil? || @user.nil?
+    session['user_id'] = nil
     session["user_state"] = 'guest'
     session["show_msg"] = ""
     session["username"] = ""
-    session["has_user_before"] = false
-  else
-    session["has_user_before"] = true
-    begin
-      @user.reload
-    rescue Exception
-      @user = session['user'] = nil
-      session["user_state"] = 'guest'
-      session["show_msg"] = ""
-      session["username"] = ""
-    end
   end
 end
 
 after do
-  session['user'] = @user
-  session["has_user_after"] = !@user.nil?
+  session['user_id'] = @user.id if @user
 end
 
 get '/' do
@@ -84,7 +73,6 @@ get '/get_status' do
     'show_msg' => session['show_msg'],
     'username' => session['username']
   }.to_json
-  session.to_json
 end
 
 get '/twitter_auth' do
