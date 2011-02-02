@@ -82,7 +82,7 @@ TermView = function() {
       }
       else if (!pEvent.ctrlKey && !pEvent.altKey && !pEvent.metaKey)
       {
-        if (a && a.match(/[\w ]/) != null)
+        if (a && a != "\0")
           self._delegate.send({type: 'key', data: a});
       }
     });
