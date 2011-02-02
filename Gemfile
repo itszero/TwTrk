@@ -2,7 +2,6 @@ source :rubygems
 
 gem 'rack'
 gem 'sinatra'
-gem 'sinatra-reloader', :require => 'sinatra/reloader'
 gem 'sinatra-mongoid', :require => 'sinatra/mongoid', :git => "git://github.com/croaky/sinatra-mongoid.git"
 gem 'json'
 gem 'twitter_oauth'

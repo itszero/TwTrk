@@ -7,6 +7,7 @@ TwTrkBot = function(term) {
   this._term = term;
   this._send_buf = [];
   this._sending_lock = false;
+  this._user_state = null;
   this._username = "";
   this._cmdbuf = "";
   this._running_cmd = null;
@@ -26,7 +27,7 @@ TwTrkBot = function(term) {
   
   /* TermView delegate */
   this.send = function(data) {
-    if (this._running_cmd && !this._running_cmd.want_input)
+    if (!this._user_state || (this._running_cmd && !this._running_cmd.want_input))
       return;
     
     if (data.data == "\r")

@@ -17,6 +17,9 @@ ENV['MONGOID_DATABASE'] = mongo_uri.path.gsub("/", "")
 # then load gems
 Bundler.require
 
+# load my hack of Rack::Session::Memcache to use Dalli lib
+require './dalli_session.rb'
+
 class SyncLog
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -44,7 +47,7 @@ end
 
 PLURK_API_KEY = "SJnWoSCIyOsGKJRMZpZipBOQ1twyR91y"
 @@oauth_info = YAML::load(File.read('oauth.yml'))
-use Rack::Session::Memcache, {
+use Rack::Session::DalliMemcache, {
   :namespace => "TwTrk_session"
 }
 
@@ -159,7 +162,7 @@ get '/info' do
       :logs => @user.sync_logs.desc(:created_at).limit(5).map { |log|
         {
           :result => log.result,
-          :synced_twits => sprintf("%012d", log.synced_twits),
+          :synced_twits => sprintf("%12d", log.synced_twits),
           :synced_at => log.created_at.strftime("%Y/%m/%d")
         }
       }
