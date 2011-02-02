@@ -5,6 +5,7 @@ require 'bundler'
 # setup mongo connections
 require 'uri'
 mongo_uri = URI.parse(ENV['MONGOHQ_URL'] || "mongodb://localhost/twtrk")
+puts "Connecting to mogno URI: #{mongo_uri}"
 ENV['MONGOID_HOST'] = mongo_uri.host
 ENV['MONGOID_PORT'] = mongo_uri.port.to_s if mongo_uri.port
 if mongo_uri.user
@@ -15,7 +16,6 @@ ENV['MONGOID_DATABASE'] = mongo_uri.path.gsub("/", "")
 
 # then load gems
 Bundler.require
-
 
 class SyncLog
   include Mongoid::Document
