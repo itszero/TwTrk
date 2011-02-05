@@ -72,7 +72,7 @@ use Rack::Session::DalliMemcache, {
 }
 
 before do
-  @user = User.find(session['user_id']) if session['user_id']
+  @user = User.find(session['user_id']) if session['user_id'] rescue nil
   if session["user_state"].nil? || @user.nil?
     session['user_id'] = nil
     session["user_state"] = 'guest'
