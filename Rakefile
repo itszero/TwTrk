@@ -36,7 +36,7 @@ task :cron do
         logger.info "syncing from #{user.last_synced_twit_id}"
         plurk = Plurk.new
         plurk.login(user.plurk_username, user.plurk_password)
-        tl = twitter.user_timeline(:since_id => user.last_synced_twit_id)
+        tl = twitter.user_timeline(:since_id => user.last_synced_twit_id, :include_rts => (user.include_rts || false))
         tl.reverse.each do |twit|
           logger.info "#{twit["id"]}: #{twit["text"]}"
           if twit["text"].strip =~ /^@[\w]+ /

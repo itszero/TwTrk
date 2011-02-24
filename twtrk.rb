@@ -42,6 +42,7 @@ class User
   field :plurk_password, :type => String
   field :should_sync, :type => Boolean, :default => false
   field :last_synced_twit_id, :type => Integer
+  field :include_rts, :type => Boolean, :default => false
 
   references_many :sync_logs
 end
@@ -180,6 +181,17 @@ get '/set_sync' do
   end    
 end
 
+get '/set_rts' do
+  if @user
+    @user.include_rts = (params[:val] == "on" ? true : false)
+    @user.save
+    {:status => 'ok'}.to_json
+  else
+    status 503
+    {:status => 'err'}.to_json
+  end    
+end
+
 get '/info' do
   if @user
     {
@@ -187,6 +199,7 @@ get '/info' do
       :twitter_username => @user.twitter_username,
       :plurk_username => (@user.plurk_username || "尚未登記"),
       :should_sync => @user.should_sync,
+      :include_rts => @user.include_rts,
       :joined_at => @user.created_at.strftime("%Y/%m/%d"),
       :logs => @user.sync_logs.desc(:created_at).limit(5).map { |log|
         {

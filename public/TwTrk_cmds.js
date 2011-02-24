@@ -41,6 +41,7 @@ TwTrkCmd_Help = function(args) {
     this.delegate.send_string(" 可用指令列表：\r\n");
     this.delegate.send_string("  plurk         - 登入噗浪帳號\r\n");
     this.delegate.send_string("  sync (on|off) - 切換是否同步\r\n");
+    this.delegate.send_string("  rt   (on|off) - 切換是否包含 rT\r\n");
     this.delegate.send_string("  info          - 顯示使用者資訊\r\n");
     this.delegate.send_string("  help          - 可用指令列表\r\n");
     this.delegate.send_string("  logout        - 登出系統\r\n");
@@ -68,7 +69,7 @@ TwTrkCmd_Info = function(args) {
         obj.delegate.send_string("親愛的會員您好，您的資訊如下：\r\n");
         obj.delegate.send_string("  \033[1;32mTwitter\033[m 帳號： " + data.twitter_username + "\r\n");
         obj.delegate.send_string("    \033[1;31mPlurk\033[m 帳號： " + data.plurk_username + "\r\n");
-        obj.delegate.send_string("      同步功能： [" + (data.should_sync ? "\033[1;32m開啟\033[m" : "\033[1;31m關閉\033[m") + "]\r\n");
+        obj.delegate.send_string("      同步功能： [" + (data.should_sync ? "\033[1;32m開啟\033[m" : "\033[1;31m關閉\033[m") + "] " + (data.include_rts ? "\033[1;32m包含 rT\033[m" : "\033[1;31m不包含 rT\033[m") + "\r\n");
         obj.delegate.send_string("      註冊日期： " + data.joined_at + "\r\n");
         obj.delegate.send_string("\r\n");
         obj.delegate.send_string("最後五筆同步記錄：\r\n");
@@ -146,6 +147,64 @@ TwTrkCmd_Sync = function(args) {
               else
                 obj.delegate.send_string("不明錯誤，請稍後再試...\r\n");
             }
+            obj.delegate._cmd_finished();
+          },
+          error: function(xhr, ts, err) {
+            obj.delegate.send_string("\033[17D");
+            obj.delegate.send_string("\033[K");
+            obj.delegate.send_string("連線\033[1;31m失敗\033[m，請稍後再試...\r\n");
+            obj.delegate._cmd_finished();
+          }
+        });
+      }
+    }
+  }
+}
+
+TwTrkCmd_RT = function(args) {
+  this.delegate = null;
+  this.args = args;
+  this.run = function() {
+    if (this.args.size == 1)
+    {
+      this.delegate.send_string("[PROMPT_BOT]");
+      this.delegate.send_string("說明：使用 rt on/off 設定是否包含rT。")
+    }
+    else 
+    {
+      this.delegate.send_string("[PROMPT_BOT]");
+      this.delegate.send_string("請稍後，設定中...");
+      var obj = this;
+      if (this.args[1] == "off")
+      {
+        $.ajax({
+          type: 'get',
+          url:'/set_rts?val=off',
+          dataType: 'json',
+          success: function(data) {
+            obj.delegate.send_string("\033[17D");
+            obj.delegate.send_string("\033[K");
+            obj.delegate.send_string("rT 已經 \033[1;31m關閉\033[m\r\n");
+            obj.delegate._cmd_finished();
+          },
+          error: function(xhr, ts, err) {
+            obj.delegate.send_string("\033[17D");
+            obj.delegate.send_string("\033[K");
+            obj.delegate.send_string("連線\033[1;31m失敗\033[m，請稍後再試...\r\n");
+            obj.delegate._cmd_finished();
+          }
+        });
+      }
+      else
+      {
+        $.ajax({
+          type: 'get',
+          url:'/set_rts?val=on',
+          dataType: 'json',
+          success: function(data) {
+            obj.delegate.send_string("\033[17D");
+            obj.delegate.send_string("\033[K");
+            obj.delegate.send_string("rT 已經 \033[1;32m啟動\033[m\r\n");
             obj.delegate._cmd_finished();
           },
           error: function(xhr, ts, err) {

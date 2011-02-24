@@ -21,6 +21,7 @@ TwTrkBot = function(term) {
     USER_AUTHED: {
       'plurk': TwTrkCmd_Plurk,
       'sync': TwTrkCmd_Sync,
+      'rt': TwTrkCmd_RT,
       'info': TwTrkCmd_Info,
       'help': TwTrkCmd_Help,
       'logout': TwTrkCmd_Logout
