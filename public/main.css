@@ -3,6 +3,14 @@ body {
   padding: 0;
 }
 
+a {
+  color: #FF0000;
+}
+
+a:visited, a:hover {
+  color: #00FF00;
+}
+
 .header {
 }
 
