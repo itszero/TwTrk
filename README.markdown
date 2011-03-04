@@ -10,7 +10,7 @@ An instance is deployed on http://twtrk.itsze.ro/. You can use it directly or, i
 License
 =======
 
-Copyright (c) 2010 Chien-An "Zero" Cho
+Copyright (c) 2011 Chien-An "Zero" Cho
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
