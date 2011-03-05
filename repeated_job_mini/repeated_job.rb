@@ -7,7 +7,7 @@ module Repeated
     attr_reader :interval, :priority
 
     def initialize
-      @interval = (ENV["REPEATED_JOB_INTERVAL"] || 5).to_i   # minutes
+      @interval = (ENV["REPEATED_JOB_INTERVAL"] || 1).to_i   # minutes
       @priority = (ENV["REPEATED_JOB_PRIORITY"] || 0).to_i
     end
 
