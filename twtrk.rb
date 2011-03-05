@@ -230,3 +230,12 @@ get '/logout' do
     redirect '/'
   end
 end
+
+get '/do_cron' do
+  heroku = Heroku::Client.new(ENV['HEROKU_USERNAME'], ENV['HEROKU_PASSWORD'])
+  heroku.set_workers(ENV['HEROKU_APP'], 1)
+  cron = Repeated::Job.new
+  cron.schedule_next
+  
+  "ok"
+end

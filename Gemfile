@@ -14,3 +14,5 @@ gem 'mechanize'
 
 gem 'delayed_job'
 gem 'delayed_job_mongoid'
+
+gem 'heroku'

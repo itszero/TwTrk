@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'logger'
 require './twtrk.rb'
+require 'heroku'
 
 desc "Cron job to sync twitter to plurk"
 task :cron do
@@ -51,6 +52,10 @@ task :cron do
         logger.info "sync complete, synced_twits = #{synced_twits}"
         user.sync_logs << SyncLog.create(:result => true, :synced_twits => synced_twits, :last_synced_twit_id => user.last_synced_twit_id)
       end
+
+      # Shutdown heroku workers
+      heroku = Heroku::Client.new(ENV['HEROKU_USERNAME'], ENV['HEROKU_PASSWORD'])
+      heroku.set_workers(ENV['HEROKU_APP'], 0)      
     rescue Exception
       logger.error $!.inspect
       logger.error $!.backtrace.join("\n")
