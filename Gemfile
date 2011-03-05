@@ -1,5 +1,6 @@
 source :rubygems
 
+gem 'rake'
 gem 'rack'
 gem 'sinatra'
 gem 'sinatra-mongoid', :require => 'sinatra/mongoid', :git => "git://github.com/croaky/sinatra-mongoid.git"
