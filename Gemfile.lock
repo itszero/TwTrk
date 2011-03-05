@@ -18,6 +18,7 @@ GEM
     bson (1.1.5)
     bson_ext (1.1.5)
     builder (2.1.2)
+    configuration (1.2.0)
     daemons (1.1.0)
     dalli (1.0.1)
     delayed_job (2.1.4)
@@ -26,8 +27,15 @@ GEM
     delayed_job_mongoid (1.0.2)
       delayed_job (~> 2.1.1)
       mongoid (~> 2.0.0.rc)
+    heroku (1.17.17)
+      json (~> 1.4.6)
+      launchy (~> 0.3.2)
+      rest-client (>= 1.4.0, < 1.7.0)
     i18n (0.5.0)
     json (1.4.6)
+    launchy (0.3.7)
+      configuration (>= 0.0.5)
+      rake (>= 0.8.1)
     mechanize (1.0.0)
       nokogiri (>= 1.2.1)
     mime-types (1.16)
@@ -43,6 +51,8 @@ GEM
     oauth (0.4.4)
     rack (1.2.1)
     rake (0.8.7)
+    rest-client (1.6.1)
+      mime-types (>= 1.16)
     sinatra (1.1.2)
       rack (~> 1.1)
       tilt (~> 1.2)
@@ -62,6 +72,7 @@ DEPENDENCIES
   dalli
   delayed_job
   delayed_job_mongoid
+  heroku
   json
   mechanize
   mongoid (= 2.0.0.beta.20)
