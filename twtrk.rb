@@ -20,6 +20,11 @@ Bundler.require
 # load my hack of Rack::Session::Memcache to use Dalli lib
 require './dalli_session.rb'
 
+# fire up RepeatedJob
+require './repeated_job_mini/repeated_job.rb'
+cron = Repeated::Job.new
+cron.schedule_next
+
 class SyncLog
   include Mongoid::Document
   include Mongoid::Timestamps
