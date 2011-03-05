@@ -21,6 +21,7 @@ Bundler.require
 require './dalli_session.rb'
 
 # fire up RepeatedJob
+Delayed::Backend::Mongoid::Job.create_indexes rescue nil
 require './repeated_job_mini/repeated_job.rb'
 cron = Repeated::Job.new
 cron.schedule_next

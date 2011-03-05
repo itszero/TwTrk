@@ -10,3 +10,6 @@ gem 'dalli'
 gem 'mongoid', '2.0.0.beta.20'
 gem 'bson_ext'
 gem 'mechanize'
+
+gem 'delayed_job'
+gem 'delayed_job_mongoid'
