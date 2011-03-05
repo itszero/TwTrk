@@ -3,6 +3,9 @@ require 'logger'
 require './twtrk.rb'
 require 'heroku'
 
+task :environment
+task :merb_env
+
 desc "Cron job to sync twitter to plurk"
 task :cron do
   logger = Logger.new(STDOUT)
