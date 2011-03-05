@@ -211,7 +211,7 @@ get '/info' do
         {
           :result => log.result,
           :synced_twits => log.synced_twits < 0 ? "  第一次" : sprintf("%8d", log.synced_twits),
-          :synced_at => log.created_at.strftime("%Y/%m/%d %0H:%0M:%0S")
+          :synced_at => (log.created_at + 16.hours).strftime("%Y/%m/%d %0H:%0M:%0S")
         }
       }
     }.to_json
