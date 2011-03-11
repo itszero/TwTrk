@@ -8,7 +8,7 @@ gem 'json'
 gem 'twitter_oauth'
 gem 'dalli'
 
-gem 'mongoid', '2.0.0.beta.20'
+gem 'mongoid', '2.0.0.rc.7'
 gem 'bson_ext'
 gem 'mechanize'
 
