@@ -56,9 +56,12 @@ task :cron do
         user.sync_logs << SyncLog.create(:result => true, :synced_twits => synced_twits, :last_synced_twit_id => user.last_synced_twit_id)
       end
 
+      # cleanup old sync logs
+      SyncLog.where(:created_at.lt => 2.days.ago).each do |e| e.destroy end
+
       # Shutdown heroku workers
       heroku = Heroku::Client.new(ENV['HEROKU_USERNAME'], ENV['HEROKU_PASSWORD'])
-      heroku.set_workers(ENV['HEROKU_APP'], 0)      
+      heroku.set_workers(ENV['HEROKU_APP'], 0)
     rescue Exception
       logger.error $!.inspect
       logger.error $!.backtrace.join("\n")
