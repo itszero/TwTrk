@@ -9,7 +9,7 @@ gem 'twitter_oauth'
 gem 'dalli'
 
 gem 'mongoid', '2.0.0.rc.7'
-gem 'bson_ext'
+gem 'bson_ext', '1.2.4'
 gem 'mechanize'
 
 gem 'delayed_job'
