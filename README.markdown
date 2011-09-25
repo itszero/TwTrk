@@ -6,6 +6,7 @@ This is a Sinatra app for syncing your tweets to plurk. It uses MongoDB as the d
 An instance is deployed on http://twtrk.itsze.ro/. You can use it directly or, if you like, you can start your own instance.
 
 ** Please note that your Plurk password will be stored as cleartext. Plurk does not provide any alternative way to authenticate. **
+UPDATE: Plurk do have OAuth authentication now as API 2.0, but I don't have time to port it just yet. Patches are welcome. :)
 
 License
 =======
